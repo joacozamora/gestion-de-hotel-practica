@@ -22,8 +22,9 @@ namespace Reservas.BData.Data.Entity
 		[Required(ErrorMessage = "El Telefono es Obligatorio")]
 		[MaxLength(20, ErrorMessage = "Solo se aceptan hasta 20 caracteres en el Nombre")]
 		public string Telefono { get; set; }
+
 		[Required(ErrorMessage = "El Numero de tarjeta es Obligatorio")]
-		[MaxLength(20, ErrorMessage = "Solo se aceptan hasta 20 caracteres en el Nombre")]
+		[MaxLength(16, ErrorMessage = "Solo se aceptan hasta 20 caracteres en el Nombre")]
 		public string NumTarjeta { get; set; }
 
 	}

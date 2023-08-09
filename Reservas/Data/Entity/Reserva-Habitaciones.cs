@@ -8,9 +8,9 @@ namespace Reservas.BData.Data.Entity
 {
 	public class Reserva_Habitaciones
 	{
-		public int id { get; set; }
+		public int Id { get; set; }
 		public int NumHab { get; set; }
-		public int idRes { get; set; }
-		public int ResPersonid { get; set; }
+		public int IdRes { get; set; }
+		public int IdResPersona { get; set; }
 	}
 }

@@ -20,10 +20,11 @@ namespace HotelApp.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Habitacion>>> Get()
         {
-            return await context.Habitaciones.ToListAsync();
+            var habitaciones = await context.Habitaciones.ToListAsync();
+            return habitaciones;
         }
 
-        [HttpGet("int:nrohab")]
+        [HttpGet("int:Id")]
         public async Task<ActionResult<Habitacion>> GetNroHabitacion(int nrohab)
         {
             var buscar = await context.Habitaciones.FirstOrDefaultAsync(c => c.Nhab==nrohab);
@@ -37,19 +38,58 @@ namespace HotelApp.Server.Controllers
         }
 
         [HttpPost] 
-        public async Task<ActionResult> Post(Habitacion habitacion)
+        public async Task<ActionResult<int>> Post(Habitacion habitacion)
         {
-            var FiltrarPost = await context.Habitaciones.
-                AnyAsync(c => c.Nhab.Equals(habitacion.Nhab));
 
-            if (FiltrarPost)
-            {
-                return BadRequest($"Ya existe una habitacion con el numero {habitacion.Nhab} agregada ");
-            }
+            Habitacion nueva = new Habitacion(); //Asignacion de formulario a campos
 
-            context.Add(habitacion);
+            nueva.Nhab = habitacion.Nhab;
+            
+            
+            nueva.Camas = habitacion.Camas;
+            nueva.Estado = habitacion.Estado;
+
+            
+            nueva.Garantia = habitacion.Garantia;
+            nueva.Id = habitacion.Id;
+            nueva.Precio = habitacion.Precio;
+            
+
+            await context.AddAsync(nueva);
             await context.SaveChangesAsync();
-            return Ok();
+            return nueva.Id;
+            //try
+            //{
+            //    var FiltrarPost = await context.Habitaciones.
+            //    AnyAsync(c => c.Nhab.Equals(habitacion.Nhab));
+
+            //    if (FiltrarPost)
+            //    {
+            //        return BadRequest($"Ya existe una habitacion con el numero {habitacion.Nhab} agregada ");
+            //    }
+            //    Habitacion nueva = new() //Asignacion de formulario a campos
+            //    {
+            //        Id = habitacion.Id,
+            //        Nhab = habitacion.Nhab,
+            //        Camas = habitacion.Camas,
+            //        Estado = habitacion.Estado,
+            //        Precio = habitacion.Precio,
+            //        Garantia = habitacion.Garantia,
+            //    };
+            //    context.Add(nueva);
+            //    await context.SaveChangesAsync();
+            //    return Ok();
+            //}
+            //catch (Exception)
+            //{
+
+            //    return BadRequest($"No se pudo crear la habitacion ");
+
+            //}
+
+
+
+
         }
 
         [HttpPut]

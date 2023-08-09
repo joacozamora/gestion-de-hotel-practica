@@ -12,8 +12,8 @@ using Reservas.BData;
 namespace Reservas.BData.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20230630025453_Correcion")]
-    partial class Correcion
+    [Migration("20230809142210_bdd")]
+    partial class bdd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,43 +27,36 @@ namespace Reservas.BData.Migrations
 
             modelBuilder.Entity("Reservas.BData.Data.Entity.Habitacion", b =>
                 {
-                    b.Property<int>("Nhab")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Nhab"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Camas")
+                        .HasColumnType("int");
 
                     b.Property<string>("Estado")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Precio")
-                        .HasColumnType("Decimal(10,2)");
+                    b.Property<int>("Garantia")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Nhab")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Precio")
+                        .HasColumnType("int");
 
                     b.Property<int?>("ReservaId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Senia")
-                        .HasColumnType("Decimal(10,2)");
-
-                    b.Property<int>("camas")
-                        .HasColumnType("int");
-
-                    b.HasKey("Nhab");
+                    b.HasKey("Id");
 
                     b.HasIndex("ReservaId");
 
                     b.ToTable("Habitaciones");
-
-                    b.HasData(
-                        new
-                        {
-                            Nhab = 1,
-                            Estado = "Reservada",
-                            Precio = 200m,
-                            Senia = 30m,
-                            camas = 20
-                        });
                 });
 
             modelBuilder.Entity("Reservas.BData.Data.Entity.Huespedes", b =>
@@ -76,6 +69,13 @@ namespace Reservas.BData.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<bool>("Checking")
+                        .HasMaxLength(30)
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
                     b.Property<string>("Nombres")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -86,10 +86,6 @@ namespace Reservas.BData.Migrations
 
                     b.Property<int>("PersonaId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("checking")
-                        .HasMaxLength(30)
-                        .HasColumnType("bit");
 
                     b.HasKey("DNI");
 
@@ -124,8 +120,8 @@ namespace Reservas.BData.Migrations
 
                     b.Property<string>("NumTarjeta")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.Property<int?>("ReservaId")
                         .HasColumnType("int");
@@ -139,7 +135,7 @@ namespace Reservas.BData.Migrations
 
                     b.HasIndex("ReservaId");
 
-                    b.ToTable("Persona");
+                    b.ToTable("Personas");
                 });
 
             modelBuilder.Entity("Reservas.BData.Data.Entity.Reserva", b =>
@@ -153,6 +149,9 @@ namespace Reservas.BData.Migrations
                     b.Property<int>("DNI")
                         .HasColumnType("int");
 
+                    b.Property<int>("IdPersona")
+                        .HasColumnType("int");
+
                     b.Property<int>("Nhab")
                         .HasColumnType("int");
 
@@ -162,9 +161,6 @@ namespace Reservas.BData.Migrations
                     b.Property<DateTime>("fecha_inicio")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("idPersona")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex(new[] { "Id" }, "Id_Reserva_UQ")
@@ -173,25 +169,47 @@ namespace Reservas.BData.Migrations
                     b.ToTable("Reservas");
                 });
 
+            modelBuilder.Entity("Reservas.BData.Data.Entity.Reserva_Habitaciones", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("IdRes")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdResPersona")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumHab")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Reservas_Habitacion");
+                });
+
             modelBuilder.Entity("Reservas.BData.Data.Entity.Habitacion", b =>
                 {
                     b.HasOne("Reservas.BData.Data.Entity.Reserva", null)
-                        .WithMany("habitaciones")
+                        .WithMany("Habitaciones")
                         .HasForeignKey("ReservaId");
                 });
 
             modelBuilder.Entity("Reservas.BData.Data.Entity.Persona", b =>
                 {
                     b.HasOne("Reservas.BData.Data.Entity.Reserva", null)
-                        .WithMany("personas")
+                        .WithMany("Personas")
                         .HasForeignKey("ReservaId");
                 });
 
             modelBuilder.Entity("Reservas.BData.Data.Entity.Reserva", b =>
                 {
-                    b.Navigation("habitaciones");
+                    b.Navigation("Habitaciones");
 
-                    b.Navigation("personas");
+                    b.Navigation("Personas");
                 });
 #pragma warning restore 612, 618
         }

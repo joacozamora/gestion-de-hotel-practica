@@ -8,17 +8,18 @@ namespace Reservas.BData.Data.Entity
     //[PrimaryKey(nameof(Nhab))]
     public class Habitacion
     {
+        public int Id { get; set; }
 		public int Nhab { get; set; }
 
         [Required(ErrorMessage = "El numero de camas es Obligatorio")]
-        public int camas { get; set; }
+        public int Camas { get; set; }
 
         [Required(ErrorMessage = "El estado es Obligatorio")]
         public string Estado { get; set; } = "";
 
         [Required(ErrorMessage = "El Precio es Obligatorio")]
-        public decimal Precio { get; set; }
-        public decimal Senia { get; set; }
+        public int Precio { get; set; }
+        public int Garantia { get; set; }
 
         public static implicit operator Habitacion(List<Habitacion> v)
         {
